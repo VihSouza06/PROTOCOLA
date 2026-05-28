@@ -8,3 +8,12 @@
 /dataSources.local.xml
 # Editor-based HTTP Client requests
 /httpRequests/
+
+
+.idea/
+*.iml
+target/
+*.jar
+*.war
+.DS_Store
+Thumbs.db
