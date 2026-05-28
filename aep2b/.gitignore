@@ -31,3 +31,11 @@ build/
 
 ### VS Code ###
 .vscode/
+
+.idea/
+*.iml
+target/
+*.jar
+*.war
+.DS_Store
+Thumbs.db
