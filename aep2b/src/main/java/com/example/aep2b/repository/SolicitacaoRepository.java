@@ -1,8 +1,8 @@
-package com.example.aep2b.Repositories;
+package com.example.aep2b.repository;
 
-import com.example.aep2b.Enums.Categoria;
-import com.example.aep2b.Enums.Prioridade;
-import com.example.aep2b.Models.SolicitacaoModel;
+import com.example.aep2b.enums.Categoria;
+import com.example.aep2b.enums.Prioridade;
+import com.example.aep2b.model.SolicitacaoModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

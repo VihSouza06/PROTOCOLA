@@ -1,11 +1,11 @@
-package com.example.aep2b.Dto;
+package com.example.aep2b.dto;
 
-import com.example.aep2b.Enums.Categoria;
-import com.example.aep2b.Enums.Prioridade;
-import com.example.aep2b.Enums.Status;
-import com.example.aep2b.Enums.UserRole;
-import com.example.aep2b.Models.HistoricoSolicitacaoModel;
-import com.example.aep2b.Models.SolicitacaoModel;
+import com.example.aep2b.enums.Categoria;
+import com.example.aep2b.enums.Prioridade;
+import com.example.aep2b.enums.Status;
+import com.example.aep2b.enums.UserRole;
+import com.example.aep2b.model.HistoricoSolicitacaoModel;
+import com.example.aep2b.model.SolicitacaoModel;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 

@@ -1,8 +1,8 @@
-package com.example.aep2b.Models;
+package com.example.aep2b.model;
 
-import com.example.aep2b.Enums.Categoria;
-import com.example.aep2b.Enums.Prioridade;
-import com.example.aep2b.Enums.Status;
+import com.example.aep2b.enums.Categoria;
+import com.example.aep2b.enums.Prioridade;
+import com.example.aep2b.enums.Status;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

@@ -1,8 +1,8 @@
-package com.example.aep2b.Controllers;
+package com.example.aep2b.controller;
 
-import com.example.aep2b.Dto.Dtos;
-import com.example.aep2b.Enums.UserRole;
-import com.example.aep2b.Services.UserService;
+import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.enums.UserRole;
+import com.example.aep2b.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;

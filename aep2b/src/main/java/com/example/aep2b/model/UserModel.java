@@ -1,6 +1,6 @@
-package com.example.aep2b.Models;
+package com.example.aep2b.model;
 
-import com.example.aep2b.Enums.UserRole;
+import com.example.aep2b.enums.UserRole;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

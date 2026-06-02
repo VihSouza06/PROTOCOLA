@@ -1,8 +1,8 @@
-package com.example.aep2b.Services;
+package com.example.aep2b.service;
 
-import com.example.aep2b.Dto.Dtos;
-import com.example.aep2b.Models.UserModel;
-import com.example.aep2b.Repositories.UserRepository;
+import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.model.UserModel;
+import com.example.aep2b.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

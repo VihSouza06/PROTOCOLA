@@ -1,6 +1,6 @@
-package com.example.aep2b.Repositories;
+package com.example.aep2b.repository;
 
-import com.example.aep2b.Models.UserModel;
+import com.example.aep2b.model.UserModel;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.security.core.userdetails.UserDetails;
 

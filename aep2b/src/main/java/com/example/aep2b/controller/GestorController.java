@@ -1,10 +1,10 @@
-package com.example.aep2b.Controllers;
+package com.example.aep2b.controller;
 
-import com.example.aep2b.Dto.Dtos;
-import com.example.aep2b.Enums.Categoria;
-import com.example.aep2b.Enums.Prioridade;
-import com.example.aep2b.Enums.Status;
-import com.example.aep2b.Services.SolicitacaoService;
+import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.enums.Categoria;
+import com.example.aep2b.enums.Prioridade;
+import com.example.aep2b.enums.Status;
+import com.example.aep2b.service.SolicitacaoService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

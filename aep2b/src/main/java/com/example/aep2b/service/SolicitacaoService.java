@@ -1,12 +1,12 @@
-package com.example.aep2b.Services;
+package com.example.aep2b.service;
 
-import com.example.aep2b.Dto.Dtos;
-import com.example.aep2b.Enums.Categoria;
-import com.example.aep2b.Enums.Prioridade;
-import com.example.aep2b.Models.HistoricoSolicitacaoModel;
-import com.example.aep2b.Models.SolicitacaoModel;
-import com.example.aep2b.Repositories.HistoricoRepository;
-import com.example.aep2b.Repositories.SolicitacaoRepository;
+import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.enums.Categoria;
+import com.example.aep2b.enums.Prioridade;
+import com.example.aep2b.model.HistoricoSolicitacaoModel;
+import com.example.aep2b.model.SolicitacaoModel;
+import com.example.aep2b.repository.HistoricoRepository;
+import com.example.aep2b.repository.SolicitacaoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
