@@ -1,58 +1,89 @@
 package com.example.aep2b.controller;
 
 import com.example.aep2b.dto.Dtos;
-import com.example.aep2b.enums.UserRole;
 import com.example.aep2b.service.UserService;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.context.HttpSessionSecurityContextRepository;
+import org.springframework.web.bind.annotation.*;
 
-@Controller
+import java.util.Map;
+
+@RestController
+@RequestMapping("/api/auth")
 public class AuthController {
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
     private UserService userService;
 
-    @GetMapping("/login")
-    public String paginaLogin(@RequestParam(required = false) String erro,
-                              @RequestParam(required = false) String logout,
-                              Model model) {
-        if (erro != null) model.addAttribute("erro", "Login ou senha incorretos.");
-        if (logout != null) model.addAttribute("mensagem", "Você saiu do sistema.");
-        return "auth/login";
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestBody Map<String, String> body,
+                                   HttpServletRequest request) {
+        try {
+            var token = new UsernamePasswordAuthenticationToken(
+                    body.get("login"), body.get("password"));
+            Authentication auth = authenticationManager.authenticate(token);
+
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            HttpSession session = request.getSession(true);
+            session.setAttribute(
+                    HttpSessionSecurityContextRepository.SPRING_SECURITY_CONTEXT_KEY,
+                    SecurityContextHolder.getContext());
+
+            String role = auth.getAuthorities().stream()
+                    .map(GrantedAuthority::getAuthority)
+                    .filter(a -> a.equals("ROLE_GESTOR"))
+                    .findFirst().map(a -> "GESTOR").orElse("CIDADAO");
+
+            return ResponseEntity.ok(Map.of("login", auth.getName(), "role", role));
+        } catch (BadCredentialsException e) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("erro", "Login ou senha incorretos."));
+        }
     }
 
-    @GetMapping("/registro")
-    public String paginaRegistro() {
-        return "auth/registro";
+    @PostMapping("/logout")
+    public ResponseEntity<?> logout(HttpServletRequest request, HttpServletResponse response) {
+        HttpSession session = request.getSession(false);
+        if (session != null) session.invalidate();
+        SecurityContextHolder.clearContext();
+        return ResponseEntity.ok(Map.of("mensagem", "Logout realizado."));
+    }
+
+    @GetMapping("/me")
+    public ResponseEntity<?> me(Authentication auth) {
+        if (auth == null || !auth.isAuthenticated()) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("erro", "Não autenticado."));
+        }
+        String role = auth.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .filter(a -> a.equals("ROLE_GESTOR"))
+                .findFirst().map(a -> "GESTOR").orElse("CIDADAO");
+        return ResponseEntity.ok(Map.of("login", auth.getName(), "role", role));
     }
 
     @PostMapping("/registro")
-    public String registrar(@RequestParam String login,
-                            @RequestParam String password,
-                            @RequestParam String role,
-                            Model model) {
+    public ResponseEntity<?> registrar(@RequestBody Dtos.RegistrarUsuarioRequest request) {
         try {
-            UserRole userRole = UserRole.valueOf(role.toUpperCase());
-            userService.registrar(new Dtos.RegistrarUsuarioRequest(login, password, userRole));
-            return "redirect:/login?cadastro=true";
+            userService.registrar(request);
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(Map.of("mensagem", "Usuário criado com sucesso."));
         } catch (IllegalArgumentException e) {
-            model.addAttribute("erro", e.getMessage());
-            return "auth/registro";
+            return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
         }
-    }
-
-    // Após o login, redireciona para a área correta
-    @GetMapping("/home")
-    public String home(Authentication auth) {
-        if (auth.getAuthorities().contains(new SimpleGrantedAuthority("ROLE_GESTOR"))) {
-            return "redirect:/gestor/painel";
-        }
-        return "redirect:/cidadao/nova-solicitacao";
     }
 }

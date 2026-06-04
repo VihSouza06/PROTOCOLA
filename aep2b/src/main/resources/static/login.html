@@ -44,7 +44,7 @@
     // Se já logado, redireciona
     fetch('/api/auth/me', { credentials: 'include' })
         .then(r => r.ok ? r.json() : null)
-        .then(u => { if (u) window.location.href = u.role === 'GESTOR' ? '/home-gestor.html' : '/home-cidadao.html'; });
+        .then(u => { if (u) window.location.href = u.role === 'GESTOR' ? '/home_gestor.html' : '/home_cidadao.html'; });
 
     document.getElementById('form-login').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -58,7 +58,7 @@
         );
 
         if (ok) {
-            window.location.href = data.role === 'GESTOR' ? '/home-gestor.html' : '/home-cidadao.html';
+            window.location.href = data.role === 'GESTOR' ? '/home_gestor.html' : '/home_cidadao.html';
         } else {
             mostrarAlerta('alerta', data.erro || 'Erro ao fazer login.', 'erro');
             btn.disabled = false; btn.textContent = 'Entrar';
