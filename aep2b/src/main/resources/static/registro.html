@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cadastro — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-titulo">
+            <h1>Cadastro</h1>
+            <p>Crie sua conta no ObservaAção</p>
+        </div>
+
+        <div id="alerta" class="alerta"></div>
+
+        <form id="form-registro">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" placeholder="Escolha um login" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Mínimo 6 caracteres" required>
+            </div>
+            <div class="form-group">
+                <label for="role">Perfil</label>
+                <select id="role">
+                    <option value="CIDADAO">Cidadão</option>
+                    <option value="GESTOR">Gestor Público</option>
+                </select>
+            </div>
+            <button type="submit" id="btn-cadastrar" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">
+                Criar conta
+            </button>
+        </form>
+
+        <div class="auth-rodape">
+            Já tem conta? <a href="/login.html">Faça login</a>
+        </div>
+    </div>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    document.getElementById('form-registro').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        esconderAlerta('alerta');
+        const btn = document.getElementById('btn-cadastrar');
+        btn.disabled = true; btn.textContent = 'Cadastrando...';
+
+        const pass = document.getElementById('password').value;
+        if (pass.length < 6) {
+            mostrarAlerta('alerta', 'Senha deve ter pelo menos 6 caracteres.', 'erro');
+            btn.disabled = false; btn.textContent = 'Criar conta';
+            return;
+        }
+
+        const { ok, data } = await registro(
+            document.getElementById('login').value.trim(),
+            pass,
+            document.getElementById('role').value
+        );
+
+        if (ok) {
+            mostrarAlerta('alerta', 'Conta criada! Redirecionando...', 'sucesso');
+            setTimeout(() => window.location.href = '/login.html', 1500);
+        } else {
+            mostrarAlerta('alerta', data.erro || 'Erro ao cadastrar.', 'erro');
+            btn.disabled = false; btn.textContent = 'Criar conta';
+        }
+    });
+</script>
+</body>
+</html>

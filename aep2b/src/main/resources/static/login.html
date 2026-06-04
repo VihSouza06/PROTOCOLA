@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+<div class="auth-wrapper">
+    <div class="auth-card">
+        <div class="auth-titulo">
+            <h1>ObservaAção</h1>
+            <p>Sistema de Solicitações Públicas</p>
+        </div>
+
+        <div id="alerta" class="alerta"></div>
+
+        <form id="form-login">
+            <div class="form-group">
+                <label for="login">Login</label>
+                <input type="text" id="login" placeholder="Seu login" required autofocus>
+            </div>
+            <div class="form-group">
+                <label for="password">Senha</label>
+                <input type="password" id="password" placeholder="Sua senha" required>
+            </div>
+            <button type="submit" id="btn-entrar" class="btn btn-primary" style="width:100%; margin-top:0.5rem;">
+                Entrar
+            </button>
+        </form>
+
+        <div class="auth-rodape">
+            Não tem conta? <a href="/registro.html">Cadastre-se</a>
+        </div>
+        <div class="auth-dica">
+            Teste: <strong>cidadao</strong> / 123456 &nbsp;|&nbsp; <strong>gestor</strong> / 123456
+        </div>
+    </div>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    // Se já logado, redireciona
+    fetch('/api/auth/me', { credentials: 'include' })
+        .then(r => r.ok ? r.json() : null)
+        .then(u => { if (u) window.location.href = u.role === 'GESTOR' ? '/home-gestor.html' : '/home-cidadao.html'; });
+
+    document.getElementById('form-login').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        esconderAlerta('alerta');
+        const btn = document.getElementById('btn-entrar');
+        btn.disabled = true; btn.textContent = 'Entrando...';
+
+        const { ok, data } = await login(
+            document.getElementById('login').value.trim(),
+            document.getElementById('password').value
+        );
+
+        if (ok) {
+            window.location.href = data.role === 'GESTOR' ? '/home-gestor.html' : '/home-cidadao.html';
+        } else {
+            mostrarAlerta('alerta', data.erro || 'Erro ao fazer login.', 'erro');
+            btn.disabled = false; btn.textContent = 'Entrar';
+        }
+    });
+</script>
+</body>
+</html>

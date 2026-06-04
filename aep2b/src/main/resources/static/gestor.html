@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Listar Demandas — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/home-gestor.html" class="logo">Observa<span>Ação</span></a>
+    <div class="topbar-direita">
+        <span class="usuario-info" id="nome-usuario"></span>
+        <button onclick="logout()" class="btn-logout">Sair</button>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-titulo">Gestor</div>
+        <a href="/home-gestor.html"><span class="sidebar-icone">🏠</span> Início</a>
+        <a href="/gestor.html" class="ativo"><span class="sidebar-icone">📊</span> Listar Demandas</a>
+        <a href="/atualizar-gestor.html"><span class="sidebar-icone">✏️</span> Atualizar por Protocolo</a>
+    </aside>
+
+    <main class="conteudo">
+        <div id="alerta-global" class="alerta"></div>
+
+        <div class="card">
+            <h2>📊 Todas as Demandas</h2>
+
+            <div class="filtros">
+                <div class="form-group">
+                    <label>Prioridade</label>
+                    <select id="filtro-prioridade">
+                        <option value="">Todas</option>
+                        <option value="ALTA">Alta</option>
+                        <option value="MEDIA">Média</option>
+                        <option value="BAIXA">Baixa</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Categoria</label>
+                    <select id="filtro-categoria">
+                        <option value="">Todas</option>
+                        <option value="ILUMINACAO">Iluminação</option>
+                        <option value="BURACO">Buraco</option>
+                        <option value="LIMPEZA">Limpeza</option>
+                        <option value="SAUDE">Saúde</option>
+                        <option value="SEGURANCA_ESCOLAR">Segurança Escolar</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Endereço</label>
+                    <input type="text" id="filtro-endereco" placeholder="Ex: Centro">
+                </div>
+                <div style="display:flex; gap:0.5rem; align-items:flex-end;">
+                    <button onclick="carregarLista()" class="btn btn-primary btn-sm">Filtrar</button>
+                    <button onclick="limparFiltros()" class="btn btn-secondary btn-sm">Limpar</button>
+                </div>
+            </div>
+
+            <div class="tabela-wrapper">
+                <div id="loading" class="loading">Carregando...</div>
+                <table id="tabela" style="display:none;">
+                    <thead>
+                    <tr>
+                        <th>Protocolo</th><th>Categoria</th><th>Localização</th>
+                        <th>Prioridade</th><th>Status</th><th>Data</th><th>Ação</th>
+                    </tr>
+                    </thead>
+                    <tbody id="tabela-body"></tbody>
+                </table>
+                <div id="tabela-vazia" class="tabela-vazia" style="display:none;">
+                    Nenhuma demanda encontrada.
+                </div>
+            </div>
+        </div>
+    </main>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal-overlay" onclick="fecharModalSeFora(event)">
+    <div class="modal">
+        <h3>✏️ Atualizar Demanda</h3>
+        <div class="modal-resumo" id="modal-resumo"></div>
+        <div id="alerta-modal" class="alerta"></div>
+        <div class="form-row">
+            <div class="form-group">
+                <label>Novo Status *</label>
+                <select id="modal-status">
+                    <option value="ABERTO">ABERTO</option>
+                    <option value="TRIAGEM">TRIAGEM</option>
+                    <option value="EM_EXECUCAO">EM_EXECUCAO</option>
+                    <option value="RESOLVIDO">RESOLVIDO</option>
+                    <option value="ENCERRADO">ENCERRADO</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <label>Nova Prioridade *</label>
+                <select id="modal-prioridade">
+                    <option value="ALTA">ALTA</option>
+                    <option value="MEDIA">MEDIA</option>
+                    <option value="BAIXA">BAIXA</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label>Responsável *</label>
+            <input type="text" id="modal-responsavel" placeholder="Seu nome">
+        </div>
+        <div class="form-group">
+            <label>Comentário *</label>
+            <textarea id="modal-comentario" placeholder="Descreva a ação tomada..."></textarea>
+            <small style="color:#94a3b8; font-size:0.8rem;">Obrigatório para rastreabilidade.</small>
+        </div>
+        <div class="form-acoes">
+            <button onclick="salvarAtualizacao()" class="btn btn-success" id="btn-salvar">Salvar</button>
+            <button onclick="fecharModal()" class="btn btn-secondary">Cancelar</button>
+        </div>
+    </div>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    let protocoloAtual = null;
+
+    verificarRole('GESTOR').then(u => {
+        if (u) { document.getElementById('nome-usuario').textContent = u.login; carregarLista(); }
+    });
+
+    async function carregarLista() {
+        document.getElementById('loading').style.display = 'block';
+        document.getElementById('tabela').style.display = 'none';
+        document.getElementById('tabela-vazia').style.display = 'none';
+
+        const { ok, data } = await listarSolicitacoes({
+            prioridade: document.getElementById('filtro-prioridade').value,
+            categoria:  document.getElementById('filtro-categoria').value,
+            endereco:   document.getElementById('filtro-endereco').value.trim()
+        });
+
+        document.getElementById('loading').style.display = 'none';
+        if (!ok) { mostrarAlerta('alerta-global', 'Erro ao carregar demandas.', 'erro'); return; }
+
+        if (data.length === 0) {
+            document.getElementById('tabela-vazia').style.display = 'block'; return;
+        }
+
+        document.getElementById('tabela-body').innerHTML = data.map(s => `
+            <tr>
+                <td style="font-weight:700;color:#1a56db;">${s.protocolo}</td>
+                <td>${s.categoria}</td>
+                <td style="max-width:180px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"
+                    title="${s.endereco}">${s.endereco}</td>
+                <td>${badgePrioridade(s.prioridade)}</td>
+                <td>${badgeStatus(s.status)}</td>
+                <td style="color:#64748b;font-size:0.85rem;">
+                    ${new Date(s.dataCriacao).toLocaleDateString('pt-BR')}
+                </td>
+                <td>
+                    <button onclick='abrirModal(${JSON.stringify(s)})'
+                            class="btn btn-primary btn-sm">Atualizar</button>
+                </td>
+            </tr>`).join('');
+
+        document.getElementById('tabela').style.display = 'table';
+    }
+
+    function limparFiltros() {
+        document.getElementById('filtro-prioridade').value = '';
+        document.getElementById('filtro-categoria').value  = '';
+        document.getElementById('filtro-endereco').value   = '';
+        carregarLista();
+    }
+
+    function abrirModal(s) {
+        protocoloAtual = s.protocolo;
+        esconderAlerta('alerta-modal');
+        document.getElementById('modal-resumo').innerHTML =
+            `<strong>${s.protocolo}</strong> — ${s.categoria}<br>
+             <span style="color:#64748b;">${s.endereco}</span>`;
+        document.getElementById('modal-status').value     = s.status;
+        document.getElementById('modal-prioridade').value = s.prioridade;
+        document.getElementById('modal-responsavel').value = '';
+        document.getElementById('modal-comentario').value  = '';
+        document.getElementById('modal-overlay').classList.add('aberto');
+    }
+
+    function fecharModal() {
+        document.getElementById('modal-overlay').classList.remove('aberto');
+        protocoloAtual = null;
+    }
+
+    function fecharModalSeFora(e) {
+        if (e.target === document.getElementById('modal-overlay')) fecharModal();
+    }
+
+    async function salvarAtualizacao() {
+        esconderAlerta('alerta-modal');
+        const responsavel = document.getElementById('modal-responsavel').value.trim();
+        const comentario  = document.getElementById('modal-comentario').value.trim();
+        if (!responsavel || !comentario) {
+            mostrarAlerta('alerta-modal', 'Preencha responsável e comentário.', 'erro'); return;
+        }
+
+        const btn = document.getElementById('btn-salvar');
+        btn.disabled = true; btn.textContent = 'Salvando...';
+
+        const { ok, data } = await atualizarStatus(protocoloAtual, {
+            novoStatus:     document.getElementById('modal-status').value,
+            novaPrioridade: document.getElementById('modal-prioridade').value,
+            responsavel, comentario
+        });
+
+        btn.disabled = false; btn.textContent = 'Salvar';
+
+        if (ok) {
+            fecharModal();
+            mostrarAlerta('alerta-global', 'Demanda atualizada com sucesso!', 'sucesso');
+            setTimeout(() => esconderAlerta('alerta-global'), 3000);
+            carregarLista();
+        } else {
+            mostrarAlerta('alerta-modal', data.erro || 'Erro ao atualizar.', 'erro');
+        }
+    }
+
+    document.getElementById('filtro-endereco').addEventListener('keydown', e => {
+        if (e.key === 'Enter') carregarLista();
+    });
+</script>
+</body>
+</html>

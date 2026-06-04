@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Início — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/home-cidadao.html" class="logo">Observa<span>Ação</span></a>
+    <div class="topbar-direita">
+        <span class="usuario-info" id="nome-usuario"></span>
+        <button onclick="logout()" class="btn-logout">Sair</button>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-titulo">Cidadão</div>
+        <a href="/home-cidadao.html" class="ativo">
+            <span class="sidebar-icone">🏠</span> Início
+        </a>
+        <a href="/cidadao.html">
+            <span class="sidebar-icone">📋</span> Nova Solicitação
+        </a>
+        <a href="/acompanhar.html">
+            <span class="sidebar-icone">🔍</span> Acompanhar
+        </a>
+    </aside>
+
+    <main class="conteudo">
+        <div style="margin-bottom:1.5rem;">
+            <h1 style="font-size:1.4rem; color:#1e3a5f; margin-bottom:0.3rem;">
+                Bem-vindo, <span id="nome-boas-vindas"></span>! 👋
+            </h1>
+            <p style="color:#64748b; font-size:0.95rem;">O que você deseja fazer hoje?</p>
+        </div>
+
+        <div class="menu-grid">
+            <a href="/cidadao.html" class="menu-card">
+                <div class="mc-icone">📋</div>
+                <div class="mc-titulo">Nova Solicitação</div>
+                <div class="mc-desc">Registre um problema público como buraco, iluminação ou limpeza</div>
+            </a>
+            <a href="/acompanhar.html" class="menu-card">
+                <div class="mc-icone">🔍</div>
+                <div class="mc-titulo">Acompanhar</div>
+                <div class="mc-desc">Consulte o status de uma solicitação pelo número do protocolo</div>
+            </a>
+        </div>
+    </main>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    verificarSessao().then(u => {
+        if (!u) return;
+        document.getElementById('nome-usuario').textContent = u.login;
+        document.getElementById('nome-boas-vindas').textContent = u.login;
+    });
+</script>
+</body>
+</html>

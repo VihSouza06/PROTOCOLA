@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Acompanhar — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/home-cidadao.html" class="logo">Observa<span>Ação</span></a>
+    <div class="topbar-direita">
+        <span class="usuario-info" id="nome-usuario"></span>
+        <button onclick="logout()" class="btn-logout">Sair</button>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-titulo">Cidadão</div>
+        <a href="/home-cidadao.html"><span class="sidebar-icone">🏠</span> Início</a>
+        <a href="/cidadao.html"><span class="sidebar-icone">📋</span> Nova Solicitação</a>
+        <a href="/acompanhar.html" class="ativo"><span class="sidebar-icone">🔍</span> Acompanhar</a>
+    </aside>
+
+    <main class="conteudo">
+
+        <div class="card">
+            <h2>🔍 Acompanhar Solicitação</h2>
+            <div id="alerta-busca" class="alerta"></div>
+            <div style="display:flex; gap:1rem; align-items:flex-end;">
+                <div class="form-group" style="flex:1; margin:0;">
+                    <label for="protocolo-busca">Número do Protocolo</label>
+                    <input type="text" id="protocolo-busca" placeholder="Ex: A1B2C3D4"
+                           style="text-transform:uppercase;">
+                </div>
+                <button onclick="consultarProtocolo()" class="btn btn-primary">Consultar</button>
+            </div>
+        </div>
+
+        <div class="card" id="resultado-busca" style="display:none;">
+            <h2>Detalhes da Solicitação</h2>
+            <div class="detalhe-grid" id="detalhe-grid"></div>
+            <div class="detalhe-descricao" id="detalhe-descricao"></div>
+            <div id="historico-section" style="margin-top:1.5rem; display:none;">
+                <h3 style="font-size:1rem; color:#374151; margin-bottom:0.75rem;">📋 Histórico</h3>
+                <ul class="historico-lista" id="historico-lista"></ul>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    verificarSessao().then(u => {
+        if (u) document.getElementById('nome-usuario').textContent = u.login;
+    });
+
+    async function consultarProtocolo() {
+        const protocolo = document.getElementById('protocolo-busca').value.trim().toUpperCase();
+        esconderAlerta('alerta-busca');
+        document.getElementById('resultado-busca').style.display = 'none';
+        if (!protocolo) { mostrarAlerta('alerta-busca', 'Digite o número do protocolo.', 'erro'); return; }
+
+        const { ok, data } = await buscarPorProtocolo(protocolo);
+        if (!ok) { mostrarAlerta('alerta-busca', data.erro || 'Protocolo não encontrado.', 'erro'); return; }
+
+        document.getElementById('detalhe-grid').innerHTML = `
+            <div class="detalhe-item"><label>Protocolo</label>
+                <span style="font-weight:700;color:#1a56db;">${data.protocolo}</span></div>
+            <div class="detalhe-item"><label>Status</label><span>${badgeStatus(data.status)}</span></div>
+            <div class="detalhe-item"><label>Categoria</label><span>${data.categoria}</span></div>
+            <div class="detalhe-item"><label>Prioridade</label><span>${badgePrioridade(data.prioridade)}</span></div>
+            <div class="detalhe-item"><label>Localização</label><span>${data.endereco}</span></div>
+            <div class="detalhe-item"><label>Data de Abertura</label><span>${formatarData(data.dataCriacao)}</span></div>
+        `;
+        document.getElementById('detalhe-descricao').innerHTML =
+            `<label>Descrição</label><p>${data.descricao}</p>`;
+
+        if (data.historico && data.historico.length > 0) {
+            document.getElementById('historico-lista').innerHTML = data.historico.map(h => `
+                <li>
+                    <div class="hist-data">${formatarData(h.data)}</div>
+                    <div class="hist-info">
+                        <strong>${badgeStatus(h.status)} — ${h.responsavel}</strong>
+                        <p>${h.comentario}</p>
+                    </div>
+                </li>`).join('');
+            document.getElementById('historico-section').style.display = 'block';
+        }
+        document.getElementById('resultado-busca').style.display = 'block';
+    }
+
+    document.getElementById('protocolo-busca').addEventListener('keydown', e => {
+        if (e.key === 'Enter') consultarProtocolo();
+    });
+</script>
+</body>
+</html>

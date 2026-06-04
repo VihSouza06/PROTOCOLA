@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nova Solicitação — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/home-cidadao.html" class="logo">Observa<span>Ação</span></a>
+    <div class="topbar-direita">
+        <span class="usuario-info" id="nome-usuario"></span>
+        <button onclick="logout()" class="btn-logout">Sair</button>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-titulo">Cidadão</div>
+        <a href="/home-cidadao.html"><span class="sidebar-icone">🏠</span> Início</a>
+        <a href="/cidadao.html" class="ativo"><span class="sidebar-icone">📋</span> Nova Solicitação</a>
+        <a href="/acompanhar.html"><span class="sidebar-icone">🔍</span> Acompanhar</a>
+    </aside>
+
+    <main class="conteudo">
+
+        <!-- Formulário -->
+        <div class="card" id="card-form">
+            <h2>📋 Registrar Nova Solicitação</h2>
+            <div id="alerta-form" class="alerta"></div>
+            <form id="form-solicitacao">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="categoria">Categoria *</label>
+                        <select id="categoria" required>
+                            <option value="">Selecione...</option>
+                            <option value="ILUMINACAO">Iluminação</option>
+                            <option value="BURACO">Buraco</option>
+                            <option value="LIMPEZA">Limpeza</option>
+                            <option value="SAUDE">Saúde</option>
+                            <option value="SEGURANCA_ESCOLAR">Segurança Escolar</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="endereco">Localização *</label>
+                        <input type="text" id="endereco" placeholder="Ex: Rua das Flores, 123 - Centro" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="descricao">Descrição do problema *</label>
+                    <textarea id="descricao" placeholder="Descreva o problema com detalhes..." required></textarea>
+                </div>
+                <div class="checkbox-group">
+                    <input type="checkbox" id="anonimo" onchange="toggleNome(this)">
+                    <label for="anonimo">Quero registrar anonimamente</label>
+                </div>
+                <div class="form-group" id="campo-nome">
+                    <label for="nomeSolicitante">Seu nome *</label>
+                    <input type="text" id="nomeSolicitante" placeholder="Nome completo">
+                </div>
+                <div class="form-acoes">
+                    <button type="submit" class="btn btn-primary" id="btn-registrar">Registrar Solicitação</button>
+                    <a href="/home-cidadao.html" class="btn btn-secondary">Voltar</a>
+                </div>
+            </form>
+        </div>
+
+        <!-- Confirmação -->
+        <div class="card" id="card-confirmacao" style="display:none;">
+            <div class="protocolo-box">
+                <div class="protocolo-icone">✅</div>
+                <h2 style="border:none; text-align:center; color:#166534;">Solicitação Registrada!</h2>
+                <p style="color:#4a5568;">Seu número de protocolo é:</p>
+                <div class="protocolo-numero" id="protocolo-gerado"></div>
+                <p class="protocolo-dica">Anote este código para consultar o andamento.</p>
+                <div class="form-acoes" style="justify-content:center;">
+                    <button onclick="novaSolicitacao()" class="btn btn-secondary">Nova Solicitação</button>
+                    <a href="/acompanhar.html" class="btn btn-primary">Acompanhar Status</a>
+                </div>
+            </div>
+        </div>
+
+    </main>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    verificarSessao().then(u => {
+        if (u) document.getElementById('nome-usuario').textContent = u.login;
+    });
+
+    function toggleNome(cb) {
+        document.getElementById('campo-nome').style.display = cb.checked ? 'none' : 'block';
+    }
+
+    function novaSolicitacao() {
+        document.getElementById('form-solicitacao').reset();
+        document.getElementById('campo-nome').style.display = 'block';
+        document.getElementById('card-form').style.display = 'block';
+        document.getElementById('card-confirmacao').style.display = 'none';
+        esconderAlerta('alerta-form');
+    }
+
+    document.getElementById('form-solicitacao').addEventListener('submit', async (e) => {
+        e.preventDefault();
+        esconderAlerta('alerta-form');
+
+        const anonimo = document.getElementById('anonimo').checked;
+        const nome    = document.getElementById('nomeSolicitante').value.trim();
+        if (!anonimo && !nome) {
+            mostrarAlerta('alerta-form', 'Informe seu nome ou marque a opção anônimo.', 'erro');
+            return;
+        }
+
+        const btn = document.getElementById('btn-registrar');
+        btn.disabled = true; btn.textContent = 'Registrando...';
+
+        const { ok, data } = await criarSolicitacao({
+            categoria: document.getElementById('categoria').value,
+            descricao: document.getElementById('descricao').value.trim(),
+            endereco:  document.getElementById('endereco').value.trim(),
+            anonimo,
+            nomeSolicitante: anonimo ? null : nome
+        });
+
+        btn.disabled = false; btn.textContent = 'Registrar Solicitação';
+
+        if (ok) {
+            document.getElementById('protocolo-gerado').textContent = data.protocolo;
+            document.getElementById('card-form').style.display = 'none';
+            document.getElementById('card-confirmacao').style.display = 'block';
+        } else {
+            mostrarAlerta('alerta-form', data.erro || 'Erro ao registrar.', 'erro');
+        }
+    });
+</script>
+</body>
+</html>

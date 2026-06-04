@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Atualizar por Protocolo — ObservaAção</title>
+    <link rel="stylesheet" href="/style.css">
+</head>
+<body>
+
+<header class="topbar">
+    <a href="/home-gestor.html" class="logo">Observa<span>Ação</span></a>
+    <div class="topbar-direita">
+        <span class="usuario-info" id="nome-usuario"></span>
+        <button onclick="logout()" class="btn-logout">Sair</button>
+    </div>
+</header>
+
+<div class="layout">
+    <aside class="sidebar">
+        <div class="sidebar-titulo">Gestor</div>
+        <a href="/home-gestor.html"><span class="sidebar-icone">🏠</span> Início</a>
+        <a href="/gestor.html"><span class="sidebar-icone">📊</span> Listar Demandas</a>
+        <a href="/atualizar-gestor.html" class="ativo"><span class="sidebar-icone">✏️</span> Atualizar por Protocolo</a>
+    </aside>
+
+    <main class="conteudo">
+
+        <!-- Busca pelo protocolo -->
+        <div class="card">
+            <h2>🔍 Buscar Solicitação</h2>
+            <div id="alerta-busca" class="alerta"></div>
+            <div style="display:flex; gap:1rem; align-items:flex-end;">
+                <div class="form-group" style="flex:1; margin:0;">
+                    <label for="protocolo-busca">Número do Protocolo</label>
+                    <input type="text" id="protocolo-busca"
+                           placeholder="Ex: A1B2C3D4"
+                           style="text-transform:uppercase;">
+                </div>
+                <button onclick="buscar()" class="btn btn-primary">Buscar</button>
+            </div>
+        </div>
+
+        <!-- Detalhes + formulário de atualização -->
+        <div id="secao-atualizacao" style="display:none;">
+
+            <div class="card">
+                <h2>📄 Detalhes da Solicitação</h2>
+                <div class="detalhe-grid" id="detalhe-grid"></div>
+                <div class="detalhe-descricao" id="detalhe-descricao"></div>
+
+                <div id="historico-section" style="margin-top:1.5rem; display:none;">
+                    <h3 style="font-size:1rem; color:#374151; margin-bottom:0.75rem;">📋 Histórico</h3>
+                    <ul class="historico-lista" id="historico-lista"></ul>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>✏️ Atualizar Status</h2>
+                <div id="alerta-atualizacao" class="alerta"></div>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="novo-status">Novo Status *</label>
+                        <select id="novo-status">
+                            <option value="ABERTO">ABERTO</option>
+                            <option value="TRIAGEM">TRIAGEM</option>
+                            <option value="EM_EXECUCAO">EM_EXECUCAO</option>
+                            <option value="RESOLVIDO">RESOLVIDO</option>
+                            <option value="ENCERRADO">ENCERRADO</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="nova-prioridade">Nova Prioridade *</label>
+                        <select id="nova-prioridade">
+                            <option value="ALTA">ALTA</option>
+                            <option value="MEDIA">MEDIA</option>
+                            <option value="BAIXA">BAIXA</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="responsavel">Responsável *</label>
+                    <input type="text" id="responsavel" placeholder="Seu nome">
+                </div>
+                <div class="form-group">
+                    <label for="comentario">Comentário *</label>
+                    <textarea id="comentario" placeholder="Descreva a ação tomada..."></textarea>
+                    <small style="color:#94a3b8; font-size:0.8rem;">Obrigatório para rastreabilidade.</small>
+                </div>
+                <div class="form-acoes">
+                    <button onclick="salvar()" class="btn btn-success" id="btn-salvar">Salvar Atualização</button>
+                    <button onclick="limpar()" class="btn btn-secondary">Cancelar</button>
+                </div>
+            </div>
+
+        </div>
+
+    </main>
+</div>
+
+<script src="/api.js"></script>
+<script>
+    let protocoloAtual = null;
+
+    verificarRole('GESTOR').then(u => {
+        if (u) document.getElementById('nome-usuario').textContent = u.login;
+    });
+
+    async function buscar() {
+        const protocolo = document.getElementById('protocolo-busca').value.trim().toUpperCase();
+        esconderAlerta('alerta-busca');
+        document.getElementById('secao-atualizacao').style.display = 'none';
+
+        if (!protocolo) {
+            mostrarAlerta('alerta-busca', 'Digite o número do protocolo.', 'erro'); return;
+        }
+
+        const { ok, data } = await buscarPorProtocolo(protocolo);
+        if (!ok) {
+            mostrarAlerta('alerta-busca', data.erro || 'Protocolo não encontrado.', 'erro'); return;
+        }
+
+        protocoloAtual = data.protocolo;
+
+        // Preenche detalhes
+        document.getElementById('detalhe-grid').innerHTML = `
+            <div class="detalhe-item"><label>Protocolo</label>
+                <span style="font-weight:700;color:#1a56db;">${data.protocolo}</span></div>
+            <div class="detalhe-item"><label>Status Atual</label>
+                <span>${badgeStatus(data.status)}</span></div>
+            <div class="detalhe-item"><label>Categoria</label>
+                <span>${data.categoria}</span></div>
+            <div class="detalhe-item"><label>Prioridade Atual</label>
+                <span>${badgePrioridade(data.prioridade)}</span></div>
+            <div class="detalhe-item"><label>Solicitante</label>
+                <span>${data.nomeSolicitante}</span></div>
+            <div class="detalhe-item"><label>Localização</label>
+                <span>${data.endereco}</span></div>
+            <div class="detalhe-item"><label>Data de Abertura</label>
+                <span>${formatarData(data.dataCriacao)}</span></div>
+        `;
+        document.getElementById('detalhe-descricao').innerHTML =
+            `<label>Descrição</label><p>${data.descricao}</p>`;
+
+        // Pré-seleciona valores atuais no formulário
+        document.getElementById('novo-status').value    = data.status;
+        document.getElementById('nova-prioridade').value = data.prioridade;
+        document.getElementById('responsavel').value    = '';
+        document.getElementById('comentario').value     = '';
+        esconderAlerta('alerta-atualizacao');
+
+        // Histórico
+        if (data.historico && data.historico.length > 0) {
+            document.getElementById('historico-lista').innerHTML = data.historico.map(h => `
+                <li>
+                    <div class="hist-data">${formatarData(h.data)}</div>
+                    <div class="hist-info">
+                        <strong>${badgeStatus(h.status)} — ${h.responsavel}</strong>
+                        <p>${h.comentario}</p>
+                    </div>
+                </li>`).join('');
+            document.getElementById('historico-section').style.display = 'block';
+        } else {
+            document.getElementById('historico-section').style.display = 'none';
+        }
+
+        document.getElementById('secao-atualizacao').style.display = 'block';
+        document.getElementById('secao-atualizacao').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    async function salvar() {
+        esconderAlerta('alerta-atualizacao');
+        const responsavel = document.getElementById('responsavel').value.trim();
+        const comentario  = document.getElementById('comentario').value.trim();
+        if (!responsavel || !comentario) {
+            mostrarAlerta('alerta-atualizacao', 'Preencha responsável e comentário.', 'erro'); return;
+        }
+
+        const btn = document.getElementById('btn-salvar');
+        btn.disabled = true; btn.textContent = 'Salvando...';
+
+        const { ok, data } = await atualizarStatus(protocoloAtual, {
+            novoStatus:     document.getElementById('novo-status').value,
+            novaPrioridade: document.getElementById('nova-prioridade').value,
+            responsavel, comentario
+        });
+
+        btn.disabled = false; btn.textContent = 'Salvar Atualização';
+
+        if (ok) {
+            mostrarAlerta('alerta-atualizacao', 'Demanda atualizada com sucesso!', 'sucesso');
+            // Recarrega os dados para mostrar histórico atualizado
+            await buscar();
+        } else {
+            mostrarAlerta('alerta-atualizacao', data.erro || 'Erro ao atualizar.', 'erro');
+        }
+    }
+
+    function limpar() {
+        document.getElementById('protocolo-busca').value = '';
+        document.getElementById('secao-atualizacao').style.display = 'none';
+        esconderAlerta('alerta-busca');
+        protocoloAtual = null;
+    }
+
+    document.getElementById('protocolo-busca').addEventListener('keydown', e => {
+        if (e.key === 'Enter') buscar();
+    });
+</script>
+</body>
+</html>

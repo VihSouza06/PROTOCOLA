@@ -1,5 +1,11 @@
 .idea/
 target/
+
 *.iml
+*.iws
+*.ipr
+
+.vscode/
+
 .DS_Store
 Thumbs.db
