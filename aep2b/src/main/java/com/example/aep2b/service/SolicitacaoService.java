@@ -1,6 +1,8 @@
 package com.example.aep2b.service;
 
-import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.dto.AtualizarStatusRequest;
+import com.example.aep2b.dto.CriarSolicitacaoRequest;
+import com.example.aep2b.dto.SolicitacaoResponse;
 import com.example.aep2b.enums.Categoria;
 import com.example.aep2b.enums.Prioridade;
 import com.example.aep2b.model.HistoricoSolicitacaoModel;
@@ -27,7 +29,7 @@ public class SolicitacaoService {
     // ---- Operações do Cidadão ----
 
     @Transactional
-    public String criarSolicitacao(Dtos.CriarSolicitacaoRequest request) {
+    public String criarSolicitacao(CriarSolicitacaoRequest request) {
         validarDadosSolicitante(request);
 
         String protocolo = UUID.randomUUID().toString().substring(0, 8).toUpperCase();
@@ -45,32 +47,32 @@ public class SolicitacaoService {
         return protocolo;
     }
 
-    public Dtos.SolicitacaoResponse buscarPorProtocolo(String protocolo) {
+    public SolicitacaoResponse buscarPorProtocolo(String protocolo) {
         SolicitacaoModel solicitacao = solicitacaoRepository
                 .findByProtocolo(protocolo.toUpperCase())
                 .orElseThrow(() -> new NoSuchElementException("Protocolo não encontrado: " + protocolo));
-        return Dtos.SolicitacaoResponse.from(solicitacao);
+        return SolicitacaoResponse.from(solicitacao);
     }
 
     // ---- Operações do Gestor ----
 
-    public List<Dtos.SolicitacaoResponse> listarTodas() {
+    public List<SolicitacaoResponse> listarTodas() {
         return solicitacaoRepository.findAll()
                 .stream()
-                .map(Dtos.SolicitacaoResponse::from)
+                .map(SolicitacaoResponse::from)
                 .toList();
     }
 
-    public List<Dtos.SolicitacaoResponse> listarComFiltros(
+    public List<SolicitacaoResponse> listarComFiltros(
             Prioridade prioridade, Categoria categoria, String endereco) {
         return solicitacaoRepository.findComFiltros(prioridade, categoria, endereco)
                 .stream()
-                .map(Dtos.SolicitacaoResponse::from)
+                .map(SolicitacaoResponse::from)
                 .toList();
     }
 
     @Transactional
-    public void atualizarStatus(String protocolo, Dtos.AtualizarStatusRequest request) {
+    public void atualizarStatus(String protocolo, AtualizarStatusRequest request) {
         SolicitacaoModel solicitacao = solicitacaoRepository
                 .findByProtocolo(protocolo.toUpperCase())
                 .orElseThrow(() -> new NoSuchElementException("Protocolo não encontrado: " + protocolo));
@@ -88,7 +90,7 @@ public class SolicitacaoService {
         historicoRepository.save(historico);
     }
 
-    private void validarDadosSolicitante(Dtos.CriarSolicitacaoRequest request) {
+    private void validarDadosSolicitante(CriarSolicitacaoRequest request) {
         if (!request.anonimo() &&
                 (request.nomeSolicitante() == null || request.nomeSolicitante().isBlank())) {
             throw new IllegalArgumentException(

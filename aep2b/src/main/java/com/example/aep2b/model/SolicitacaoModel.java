@@ -63,7 +63,7 @@ public class SolicitacaoModel {
         this.endereco = endereco;
         this.nomeSolicitante = anonimo ? "ANONIMO" : nomeSolicitante;
         this.anonimo = anonimo;
-        this.status = Status.ABERTO;
+        this.status = Status.RECEBIDO;
         this.prioridade = Prioridade.MEDIA;
         this.dataSolicitacao = LocalDateTime.now();
     }

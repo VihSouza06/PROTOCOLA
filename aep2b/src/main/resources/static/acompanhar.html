@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Acompanhar — ObservaAção</title>
+    <title>Consultar Protocolo — PROTOCOLA</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
@@ -18,16 +19,30 @@
 
 <div class="layout">
     <aside class="sidebar">
-        <div class="sidebar-titulo">Cidadão</div>
-        <a href="/home_cidadao.html"><span class="sidebar-icone">🏠</span> Início</a>
-        <a href="/cidadao.html"><span class="sidebar-icone">📋</span> Nova Solicitação</a>
-        <a href="/acompanhar.html" class="ativo"><span class="sidebar-icone">🔍</span> Acompanhar</a>
+        <div class="sidebar-titulo">Portal do Cidadão</div>
+        <a href="/home_cidadao.html">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-home"></i>
+            </span> Painel Inicial
+        </a>
+        <a href="/cidadao.html">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-comment-alt"></i>
+            </span> Registrar Solicitação
+        </a>
+        <a href="/acompanhar.html" class="ativo">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-calendar-clock"></i>
+            </span> Consultar Protocolo
+        </a>
     </aside>
 
     <main class="conteudo">
 
         <div class="card">
-            <h2>🔍 Acompanhar Solicitação</h2>
+            <h2><i class="fi fi-rr-search" style="margin-right:8px;"></i>
+                Consultar Andamento do Protocolo
+            </h2>
             <div id="alerta-busca" class="alerta"></div>
             <div style="display:flex; gap:1rem; align-items:flex-end;">
                 <div class="form-group" style="flex:1; margin:0;">
@@ -44,7 +59,10 @@
             <div class="detalhe-grid" id="detalhe-grid"></div>
             <div class="detalhe-descricao" id="detalhe-descricao"></div>
             <div id="historico-section" style="margin-top:1.5rem; display:none;">
-                <h3 style="font-size:1rem; color:#374151; margin-bottom:0.75rem;">📋 Histórico</h3>
+                <h3 style="font-size:1rem; color:#374151; margin-bottom:0.75rem;">
+                    <i class="fi fi-rr-time-past"  style="margin-right:6px;"></i>
+                    Histórico de Tramitação
+                </h3>
                 <ul class="historico-lista" id="historico-lista"></ul>
             </div>
         </div>

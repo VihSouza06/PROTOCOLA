@@ -1,6 +1,9 @@
 package com.example.aep2b.controller;
 
-import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.dto.AtualizarStatusRequest;
+import com.example.aep2b.dto.CriarSolicitacaoRequest;
+import com.example.aep2b.dto.ProtocoloResponse;
+import com.example.aep2b.dto.SolicitacaoResponse;
 import com.example.aep2b.enums.Categoria;
 import com.example.aep2b.enums.Prioridade;
 import com.example.aep2b.service.SolicitacaoService;
@@ -21,11 +24,11 @@ public class SolicitacaoController {
     private SolicitacaoService solicitacaoService;
 
     @PostMapping
-    public ResponseEntity<?> criar(@RequestBody Dtos.CriarSolicitacaoRequest request) {
+    public ResponseEntity<?> criar(@RequestBody CriarSolicitacaoRequest request) {
         try {
             String protocolo = solicitacaoService.criarSolicitacao(request);
             return ResponseEntity.status(HttpStatus.CREATED)
-                    .body(new Dtos.ProtocoloResponse
+                    .body(new ProtocoloResponse
                             (protocolo, "Solicitação registrada! Guarde o protocolo."));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.badRequest().body(Map.of("erro", e.getMessage()));
@@ -43,7 +46,7 @@ public class SolicitacaoController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Dtos.SolicitacaoResponse>> listar(
+    public ResponseEntity<List<SolicitacaoResponse>> listar(
             @RequestParam(required = false) Prioridade prioridade,
             @RequestParam(required = false) Categoria categoria,
             @RequestParam(required = false) String endereco) {
@@ -51,7 +54,7 @@ public class SolicitacaoController {
         boolean semFiltros = prioridade == null && categoria == null
                 && (endereco == null || endereco.isBlank());
 
-        List<Dtos.SolicitacaoResponse> lista = semFiltros
+        List<SolicitacaoResponse> lista = semFiltros
                 ? solicitacaoService.listarTodas()
                 : solicitacaoService.listarComFiltros(prioridade, categoria,
                 (endereco != null && endereco.isBlank()) ? null : endereco);
@@ -61,7 +64,7 @@ public class SolicitacaoController {
 
     @PatchMapping("/{protocolo}/status")
     public ResponseEntity<?> atualizar(@PathVariable String protocolo,
-                                       @RequestBody Dtos.AtualizarStatusRequest request) {
+                                       @RequestBody AtualizarStatusRequest request) {
         try {
             solicitacaoService.atualizarStatus(protocolo, request);
             return ResponseEntity.ok(Map.of("mensagem", "Status atualizado com sucesso."));

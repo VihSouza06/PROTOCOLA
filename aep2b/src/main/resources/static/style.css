@@ -8,7 +8,7 @@ body {
     min-height: 100vh;
 }
 
-/* ===== TOPBAR (só logo + usuário + sair) ===== */
+/* ===== TOPBAR ===== */
 .topbar {
     background: #1a56db;
     height: 58px;
@@ -104,7 +104,7 @@ body {
     border-bottom: 2px solid #e2e8f0;
 }
 
-/* ===== MENU HOME (cards de opção) ===== */
+/* ===== MENU HOME ===== */
 .menu-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
@@ -209,6 +209,7 @@ body {
     transition: background 0.2s;
 }
 .btn-logout:hover { background: rgba(255,255,255,0.25); }
+#btn-entrar { justify-content: center; }
 
 /* ===== ALERTAS ===== */
 .alerta {
@@ -252,10 +253,10 @@ tbody td { padding: 0.7rem 1rem; vertical-align: middle; }
     text-transform: uppercase;
     letter-spacing: 0.04em;
 }
-.badge-ABERTO      { background: #dbeafe; color: #1d4ed8; }
-.badge-TRIAGEM     { background: #fef9c3; color: #854d0e; }
+.badge-RECEBIDO    { background: #dbeafe; color: #1d4ed8; }
+.badge-EM_ANALISE  { background: #fef9c3; color: #854d0e; }
 .badge-EM_EXECUCAO { background: #ffedd5; color: #c2410c; }
-.badge-RESOLVIDO   { background: #dcfce7; color: #15803d; }
+.badge-SOLUCIONADO { background: #dcfce7; color: #15803d; }
 .badge-ENCERRADO   { background: #f1f5f9; color: #64748b; }
 .badge-ALTA  { background: #fee2e2; color: #b91c1c; }
 .badge-MEDIA { background: #fef9c3; color: #854d0e; }

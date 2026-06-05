@@ -1,6 +1,6 @@
 package com.example.aep2b.controller;
 
-import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.dto.RegistrarUsuarioRequest;
 import com.example.aep2b.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -77,7 +77,7 @@ public class AuthController {
     }
 
     @PostMapping("/registro")
-    public ResponseEntity<?> registrar(@RequestBody Dtos.RegistrarUsuarioRequest request) {
+    public ResponseEntity<?> registrar(@RequestBody RegistrarUsuarioRequest request) {
         try {
             userService.registrar(request);
             return ResponseEntity.status(HttpStatus.CREATED)

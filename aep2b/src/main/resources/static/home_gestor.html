@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Início Gestor — ObservaAção</title>
+    <title>Portal do Gestor — PROTOCOLA</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
@@ -18,22 +19,28 @@
 
 <div class="layout">
     <aside class="sidebar">
-        <div class="sidebar-titulo">Gestor</div>
+        <div class="sidebar-titulo">Portal do Gestor</div>
         <a href="/home_gestor.html" class="ativo">
-            <span class="sidebar-icone">🏠</span> Início
+             <span class="sidebar-icone">
+                <i class="fi fi-rr-home"></i>
+            </span> Painel Inical
         </a>
         <a href="/gestor.html">
-            <span class="sidebar-icone">📊</span> Listar Demandas
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-rectangle-list"></i>
+            </span> Demandas Recebidas
         </a>
         <a href="/atualizar.html">
-            <span class="sidebar-icone">✏️</span> Atualizar por Protocolo
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-edit"></i>
+            </span> Registrar Andamento
         </a>
     </aside>
 
     <main class="conteudo">
         <div style="margin-bottom:1.5rem;">
             <h1 style="font-size:1.4rem; color:#1e3a5f; margin-bottom:0.3rem;">
-                Bem-vindo, <span id="nome-boas-vindas"></span>! 👋
+                Bem-vindo, <span id="nome-boas-vindas"></span>!
             </h1>
             <p style="color:#64748b; font-size:0.95rem;">Painel de gestão de demandas públicas.</p>
         </div>
@@ -41,12 +48,12 @@
         <div class="menu-grid">
             <a href="/gestor.html" class="menu-card">
                 <div class="mc-icone">📊</div>
-                <div class="mc-titulo">Listar Demandas</div>
+                <div class="mc-titulo">Demandas Recebidas</div>
                 <div class="mc-desc">Visualize todas as solicitações com filtros por prioridade, categoria e endereço</div>
             </a>
             <a href="/atualizar.html" class="menu-card">
                 <div class="mc-icone">✏️</div>
-                <div class="mc-titulo">Atualizar por Protocolo</div>
+                <div class="mc-titulo">Registrar Andamento</div>
                 <div class="mc-desc">Busque uma solicitação pelo número do protocolo e atualize seu status</div>
             </a>
         </div>

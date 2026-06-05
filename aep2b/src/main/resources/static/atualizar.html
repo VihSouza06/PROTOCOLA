@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Atualizar por Protocolo — ObservaAção</title>
+    <title>Gerenciar Protocolos — PROTOCOLA</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
@@ -18,17 +19,30 @@
 
 <div class="layout">
     <aside class="sidebar">
-        <div class="sidebar-titulo">Gestor</div>
-        <a href="/home_gestor.html"><span class="sidebar-icone">🏠</span> Início</a>
-        <a href="/gestor.html"><span class="sidebar-icone">📊</span> Listar Demandas</a>
-        <a href="/atualizar.html" class="ativo"><span class="sidebar-icone">✏️</span> Atualizar por Protocolo</a>
+        <div class="sidebar-titulo">Portal do Gestor</div>
+        <a href="/home_gestor.html">
+             <span class="sidebar-icone">
+                <i class="fi fi-rr-home"></i>
+            </span> Painel Inicial
+        </a>
+        <a href="/gestor.html">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-rectangle-list"></i>
+            </span> Demandas Recebidas
+        </a>
+        <a href="/atualizar.html" class="ativo">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-edit"></i>
+            </span> Registrar Andamento
+        </a>
     </aside>
 
     <main class="conteudo">
 
-        <!-- Busca pelo protocolo -->
         <div class="card">
-            <h2>🔍 Buscar Solicitação</h2>
+            <h2><i class="fi fi-rr-search" style="margin-right:8px;"></i>
+                Consultar Protocolos
+            </h2>
             <div id="alerta-busca" class="alerta"></div>
             <div style="display:flex; gap:1rem; align-items:flex-end;">
                 <div class="form-group" style="flex:1; margin:0;">
@@ -37,40 +51,42 @@
                            placeholder="Ex: A1B2C3D4"
                            style="text-transform:uppercase;">
                 </div>
-                <button onclick="buscar()" class="btn btn-primary">Buscar</button>
+                <button onclick="buscar()" class="btn btn-primary">Consultar</button>
             </div>
         </div>
 
-        <!-- Detalhes + formulário de atualização -->
         <div id="secao-atualizacao" style="display:none;">
 
             <div class="card">
-                <h2>📄 Detalhes da Solicitação</h2>
+                <h2>Detalhes da Solicitação</h2>
                 <div class="detalhe-grid" id="detalhe-grid"></div>
                 <div class="detalhe-descricao" id="detalhe-descricao"></div>
 
                 <div id="historico-section" style="margin-top:1.5rem; display:none;">
-                    <h3 style="font-size:1rem; color:#374151; margin-bottom:0.75rem;">📋 Histórico</h3>
+                    <h3 style="font-size:1rem; color:#374151; margin-bottom:0.75rem;">
+                        <i class="fi fi-rr-time-past"  style="margin-right:6px;"></i>
+                        Histórico de Tramitação
+                    </h3>
                     <ul class="historico-lista" id="historico-lista"></ul>
                 </div>
             </div>
 
             <div class="card">
-                <h2>✏️ Atualizar Status</h2>
+                <h2>Registrar Andamento da Solicitação</h2>
                 <div id="alerta-atualizacao" class="alerta"></div>
                 <div class="form-row">
                     <div class="form-group">
                         <label for="novo-status">Novo Status *</label>
                         <select id="novo-status">
-                            <option value="ABERTO">ABERTO</option>
-                            <option value="TRIAGEM">TRIAGEM</option>
+                            <option value="RECEBIDO">RECEBIDO</option>
+                            <option value="EM_ANALISE">EM_ANALISE</option>
                             <option value="EM_EXECUCAO">EM_EXECUCAO</option>
-                            <option value="RESOLVIDO">RESOLVIDO</option>
+                            <option value="SOLUCIONADO">SOLUCIONADO</option>
                             <option value="ENCERRADO">ENCERRADO</option>
                         </select>
                     </div>
                     <div class="form-group">
-                        <label for="nova-prioridade">Nova Prioridade *</label>
+                        <label for="nova-prioridade">Prioridade *</label>
                         <select id="nova-prioridade">
                             <option value="ALTA">ALTA</option>
                             <option value="MEDIA">MEDIA</option>
@@ -83,7 +99,7 @@
                     <input type="text" id="responsavel" placeholder="Seu nome">
                 </div>
                 <div class="form-group">
-                    <label for="comentario">Comentário *</label>
+                    <label for="comentario">Observação *</label>
                     <textarea id="comentario" placeholder="Descreva a ação tomada..."></textarea>
                     <small style="color:#94a3b8; font-size:0.8rem;">Obrigatório para rastreabilidade.</small>
                 </div>

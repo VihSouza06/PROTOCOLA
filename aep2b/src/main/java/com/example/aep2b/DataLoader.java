@@ -1,6 +1,6 @@
 package com.example.aep2b;
 
-import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.dto.RegistrarUsuarioRequest;
 import com.example.aep2b.enums.UserRole;
 import com.example.aep2b.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +22,7 @@ public class DataLoader implements CommandLineRunner {
 
     private void criar(String login, String senha, UserRole role) {
         try {
-            userService.registrar(new Dtos.RegistrarUsuarioRequest(login, senha, role));
+            userService.registrar(new RegistrarUsuarioRequest(login, senha, role));
         } catch (IllegalArgumentException ignored) {}
     }
 }

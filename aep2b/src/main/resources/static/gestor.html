@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Listar Demandas — ObservaAção</title>
+    <title>Demandas Recebidas — PROTOCOLA</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
@@ -18,17 +19,29 @@
 
 <div class="layout">
     <aside class="sidebar">
-        <div class="sidebar-titulo">Gestor</div>
-        <a href="/home_gestor.html"><span class="sidebar-icone">🏠</span> Início</a>
-        <a href="/gestor.html" class="ativo"><span class="sidebar-icone">📊</span> Listar Demandas</a>
-        <a href="/atualizar.html"><span class="sidebar-icone">✏️</span> Atualizar por Protocolo</a>
+        <div class="sidebar-titulo">Portal do Gestor</div>
+        <a href="/home_gestor.html">
+             <span class="sidebar-icone">
+                <i class="fi fi-rr-home"></i>
+            </span> Painel Inicial
+        </a>
+        <a href="/gestor.html" class="ativo">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-rectangle-list"></i>
+            </span> Demandas Recebidas
+        </a>
+        <a href="/atualizar.html">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-edit"></i>
+            </span> Registrar Andamento
+        </a>
     </aside>
 
     <main class="conteudo">
         <div id="alerta-global" class="alerta"></div>
 
         <div class="card">
-            <h2>📊 Todas as Demandas</h2>
+            <h2>Demandas Recebidas</h2>
 
             <div class="filtros">
                 <div class="form-group">
@@ -83,22 +96,22 @@
 <!-- MODAL -->
 <div class="modal-overlay" id="modal-overlay" onclick="fecharModalSeFora(event)">
     <div class="modal">
-        <h3>✏️ Atualizar Demanda</h3>
+        <h3>Atualizar Demanda</h3>
         <div class="modal-resumo" id="modal-resumo"></div>
         <div id="alerta-modal" class="alerta"></div>
         <div class="form-row">
             <div class="form-group">
                 <label>Novo Status *</label>
                 <select id="modal-status">
-                    <option value="ABERTO">ABERTO</option>
-                    <option value="TRIAGEM">TRIAGEM</option>
+                    <option value="RECEBIDO">RECEBIDO</option>
+                    <option value="EM_ANALISE">EM_ANALISE</option>
                     <option value="EM_EXECUCAO">EM_EXECUCAO</option>
-                    <option value="RESOLVIDO">RESOLVIDO</option>
+                    <option value="SOLUCIONADO">SOLUCIONADO</option>
                     <option value="ENCERRADO">ENCERRADO</option>
                 </select>
             </div>
             <div class="form-group">
-                <label>Nova Prioridade *</label>
+                <label>Prioridade *</label>
                 <select id="modal-prioridade">
                     <option value="ALTA">ALTA</option>
                     <option value="MEDIA">MEDIA</option>

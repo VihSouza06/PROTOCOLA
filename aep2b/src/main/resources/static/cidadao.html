@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nova Solicitação — ObservaAção</title>
+    <title>Registrar Solicitação — PROTOCOLA</title>
     <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
@@ -18,17 +19,28 @@
 
 <div class="layout">
     <aside class="sidebar">
-        <div class="sidebar-titulo">Cidadão</div>
-        <a href="/home_cidadao.html"><span class="sidebar-icone">🏠</span> Início</a>
-        <a href="/cidadao.html" class="ativo"><span class="sidebar-icone">📋</span> Nova Solicitação</a>
-        <a href="/acompanhar.html"><span class="sidebar-icone">🔍</span> Acompanhar</a>
+        <div class="sidebar-titulo">Portal do Cidadão</div>
+        <a href="/home_cidadao.html">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-home"></i>
+            </span> Painel Inicial
+        </a>
+        <a href="/cidadao.html" class="ativo">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-comment-alt"></i>
+            </span> Registrar Solicitação
+        </a>
+        <a href="/acompanhar.html">
+            <span class="sidebar-icone">
+                <i class="fi fi-rr-calendar-clock"></i>
+            </span> Consultar Protocolo
+        </a>
     </aside>
 
     <main class="conteudo">
 
-        <!-- Formulário -->
         <div class="card" id="card-form">
-            <h2>📋 Registrar Nova Solicitação</h2>
+            <h2>Registrar Solicitação</h2>
             <div id="alerta-form" class="alerta"></div>
             <form id="form-solicitacao">
                 <div class="form-row">
@@ -76,8 +88,8 @@
                 <div class="protocolo-numero" id="protocolo-gerado"></div>
                 <p class="protocolo-dica">Anote este código para consultar o andamento.</p>
                 <div class="form-acoes" style="justify-content:center;">
-                    <button onclick="novaSolicitacao()" class="btn btn-secondary">Nova Solicitação</button>
-                    <a href="/acompanhar.html" class="btn btn-primary">Acompanhar Status</a>
+                    <button onclick="novaSolicitacao()" class="btn btn-secondary">Registrar Nova Solicitação</button>
+                    <a href="/acompanhar.html" class="btn btn-primary">Consultar Protocolo</a>
                 </div>
             </div>
         </div>

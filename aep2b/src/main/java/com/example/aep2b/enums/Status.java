@@ -1,9 +1,9 @@
 package com.example.aep2b.enums;
 
 public enum Status {
-    ABERTO,
-    TRIAGEM,
+    RECEBIDO,
+    EM_ANALISE,
     EM_EXECUCAO,
-    RESOLVIDO,
+    SOLUCIONADO,
     ENCERRADO
 }

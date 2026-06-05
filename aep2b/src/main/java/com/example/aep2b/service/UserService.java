@@ -1,6 +1,6 @@
 package com.example.aep2b.service;
 
-import com.example.aep2b.dto.Dtos;
+import com.example.aep2b.dto.RegistrarUsuarioRequest;
 import com.example.aep2b.model.UserModel;
 import com.example.aep2b.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,7 +24,7 @@ public class UserService implements UserDetailsService {
                 .orElseThrow(() -> new UsernameNotFoundException("Usuário não encontrado: " + username));
     }
 
-    public void registrar(Dtos.RegistrarUsuarioRequest request){
+    public void registrar(RegistrarUsuarioRequest request){
         if (userRepository.existsByLogin(request.login())){
             throw new IllegalArgumentException("Login já em uso: " + request.login());
         }
