@@ -21,7 +21,7 @@ public class SecurityConfiguration {
                 .csrf(csrf -> csrf.disable())
                 .authorizeHttpRequests(auth -> auth
                         // Arquivos estáticos sempre públicos
-                        .requestMatchers("/", "/index.html", "/*.html", "/*.css", "/*.js").permitAll()
+                        .requestMatchers("/", "/index.html", "/*.html", "/*.css", "/*.js", "/*.png", "/images/**", "/*.ico").permitAll()
                         // API pública
                         .requestMatchers("/api/auth/login", "/api/auth/registro", "/api/auth/me").permitAll()
                         // H2

@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Painel Inicial do Cidadão — PROTOCOLA</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
 <header class="topbar">
-    <a href="/home_cidadao.html" class="logo">Observa<span>Ação</span></a>
+    <a href="/home_cidadao.html">
+        <img src="/images/logo_dark.png" alt="Protocola" style="height: 50px;">
+    </a>
     <div class="topbar-direita">
         <span class="usuario-info" id="nome-usuario"></span>
         <button onclick="logout()" class="btn-logout">Sair</button>
@@ -25,14 +28,14 @@
                 <i class="fi fi-rr-home"></i>
             </span> Painel Inicial
         </a>
-        <a href="/cidadao.html">
+        <a href="/solicitacao.html">
             <span class="sidebar-icone">
                 <i class="fi fi-rr-comment-alt"></i>
             </span> Registrar Solicitação
         </a>
-        <a href="/acompanhar.html">
+        <a href="/consultar.html">
             <span class="sidebar-icone">
-                <i class="fi fi-rr-calendar-clock"></i>
+               <i class="fi fi-rr-search-alt"></i>
             </span> Consultar Protocolo
         </a>
     </aside>
@@ -46,15 +49,21 @@
         </div>
 
         <div class="menu-grid">
-            <a href="/cidadao.html" class="menu-card">
-                <div class="mc-icone">📋</div>
+            <a href="/solicitacao.html" class="menu-card">
+                <i class="fi fi-rr-add"></i>
                 <div class="mc-titulo">Registrar Solicitação</div>
                 <div class="mc-desc">Registre um problema público como buraco, iluminação ou limpeza</div>
+                <span class="menu-card-btn menu-card-btn-solid">
+            Iniciar Solicitação &nbsp;→
+        </span>
             </a>
-            <a href="/acompanhar.html" class="menu-card">
-                <div class="mc-icone">🔍</div>
+            <a href="/consultar.html" class="menu-card">
+                <i class="fi fi-rr-search-alt"></i>
                 <div class="mc-titulo">Consultar Protocolo</div>
                 <div class="mc-desc">Consulte o status de uma solicitação pelo número do protocolo</div>
+                <span class="menu-card-btn menu-card-btn-outline">
+            Consultar Protocolo &nbsp;→
+        </span>
             </a>
         </div>
     </main>

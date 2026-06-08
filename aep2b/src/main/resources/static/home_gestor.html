@@ -4,13 +4,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Gestor — PROTOCOLA</title>
+    <link rel="icon" type="image/png" href="/images/logo.png">
     <link rel="stylesheet" href="/style.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
 <header class="topbar">
-    <a href="/home_gestor.html" class="logo">Observa<span>Ação</span></a>
+    <a href="/home_gestor.html">
+        <img src="/images/logo_dark.png" alt="Protocola" style="height: 50px;">
+    </a>
     <div class="topbar-direita">
         <span class="usuario-info" id="nome-usuario"></span>
         <button onclick="logout()" class="btn-logout">Sair</button>
@@ -25,7 +28,7 @@
                 <i class="fi fi-rr-home"></i>
             </span> Painel Inical
         </a>
-        <a href="/gestor.html">
+        <a href="/listagem.html">
             <span class="sidebar-icone">
                 <i class="fi fi-rr-rectangle-list"></i>
             </span> Demandas Recebidas
@@ -46,15 +49,21 @@
         </div>
 
         <div class="menu-grid">
-            <a href="/gestor.html" class="menu-card">
-                <div class="mc-icone">📊</div>
+            <a href="/listagem.html" class="menu-card">
+                <i class="fi fi-rr-rectangle-list"></i>
                 <div class="mc-titulo">Demandas Recebidas</div>
                 <div class="mc-desc">Visualize todas as solicitações com filtros por prioridade, categoria e endereço</div>
+                <span class="menu-card-btn menu-card-btn-solid">
+                     Listar Demandas &nbsp;→
+                </span>
             </a>
             <a href="/atualizar.html" class="menu-card">
-                <div class="mc-icone">✏️</div>
+                <i class="fi fi-rr-edit"></i>
                 <div class="mc-titulo">Registrar Andamento</div>
                 <div class="mc-desc">Busque uma solicitação pelo número do protocolo e atualize seu status</div>
+                <span class="menu-card-btn menu-card-btn-outline">
+                    Atualizar Protocolo &nbsp;→
+                </span>
             </a>
         </div>
     </main>
