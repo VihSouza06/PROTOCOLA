@@ -5,13 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal do Gestor — PROTOCOLA</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
     <link rel="stylesheet" href="https://cdn-uicons.flaticon.com/2.6.0/uicons-regular-rounded/css/uicons-regular-rounded.css">
 </head>
 <body>
 
 <header class="topbar">
-    <a href="/home_gestor.html">
+    <a href="/pages/home_gestor.html">
         <img src="/images/logo_dark.png" alt="Protocola" style="height: 50px;">
     </a>
     <div class="topbar-direita">
@@ -23,17 +23,17 @@
 <div class="layout">
     <aside class="sidebar">
         <div class="sidebar-titulo">Portal do Gestor</div>
-        <a href="/home_gestor.html" class="ativo">
+        <a href="/pages/home_gestor.html" class="ativo">
              <span class="sidebar-icone">
                 <i class="fi fi-rr-home"></i>
             </span> Painel Inical
         </a>
-        <a href="/listagem.html">
+        <a href="/pages/listagem.html">
             <span class="sidebar-icone">
                 <i class="fi fi-rr-rectangle-list"></i>
             </span> Demandas Recebidas
         </a>
-        <a href="/atualizar.html">
+        <a href="/pages/atualizar.html">
             <span class="sidebar-icone">
                 <i class="fi fi-rr-edit"></i>
             </span> Registrar Andamento
@@ -49,7 +49,7 @@
         </div>
 
         <div class="menu-grid">
-            <a href="/listagem.html" class="menu-card">
+            <a href="/pages/listagem.html" class="menu-card">
                 <i class="fi fi-rr-rectangle-list"></i>
                 <div class="mc-titulo">Demandas Recebidas</div>
                 <div class="mc-desc">Visualize todas as solicitações com filtros por prioridade, categoria e endereço</div>
@@ -57,7 +57,7 @@
                      Listar Demandas &nbsp;→
                 </span>
             </a>
-            <a href="/atualizar.html" class="menu-card">
+            <a href="/pages/atualizar.html" class="menu-card">
                 <i class="fi fi-rr-edit"></i>
                 <div class="mc-titulo">Registrar Andamento</div>
                 <div class="mc-desc">Busque uma solicitação pelo número do protocolo e atualize seu status</div>
@@ -69,7 +69,7 @@
     </main>
 </div>
 
-<script src="/api.js"></script>
+<script src="/js/api.js"></script>
 <script>
     verificarRole('GESTOR').then(u => {
         if (!u) return;

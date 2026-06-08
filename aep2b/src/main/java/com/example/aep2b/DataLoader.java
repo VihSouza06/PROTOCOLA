@@ -1,29 +1,45 @@
 package com.example.aep2b;
 
-import com.example.aep2b.dto.RegistrarUsuarioRequest;
 import com.example.aep2b.enums.UserRole;
-import com.example.aep2b.service.UserService;
+import com.example.aep2b.model.UserModel;
+import com.example.aep2b.repository.UserRepository;
+import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Profile;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
-public class DataLoader implements CommandLineRunner {
+@Profile("dev")
+public class DataLoader {
 
     @Autowired
-    private UserService userService;
+    private UserRepository usuarioRepository;
 
-    @Override
-    public void run(String... args) {
-        criar("cidadao", "123456", UserRole.CIDADAO);
-        criar("gestor",  "123456", UserRole.GESTOR);
-        System.out.println("=== Usuários de teste criados: cidadao/123456 e gestor/123456 ===");
-    }
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-    private void criar(String login, String senha, UserRole role) {
-        try {
-            userService.registrar(new RegistrarUsuarioRequest(login, senha, role));
-        } catch (IllegalArgumentException ignored) {}
+    @PostConstruct
+    public void init() {
+
+        if (usuarioRepository.count() == 0) {
+
+            UserModel gestor = new UserModel(
+                    "gestor",
+                    passwordEncoder.encode("123456"),
+                    UserRole.GESTOR
+            );
+
+            usuarioRepository.save(gestor);
+
+            UserModel cidadao = new UserModel(
+                    "cidadao",
+                    passwordEncoder.encode("123456"),
+                    UserRole.CIDADAO
+            );
+
+            usuarioRepository.save(cidadao);
+        }
     }
 }
 

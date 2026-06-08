@@ -6,7 +6,7 @@ const opcoes = {
 
 async function verificarSessao() {
     const res = await fetch('/api/auth/me', { credentials: 'include' });
-    if (!res.ok) { window.location.href = '/login.html'; return null; }
+    if (!res.ok) { window.location.href = '/pages/login.html'; return null; }
     return await res.json();
 }
 
@@ -15,7 +15,7 @@ async function verificarRole(roleNecessario) {
     if (!u) return null;
     if (u.role !== roleNecessario) {
         alert('Acesso negado.');
-        window.location.href = '/login.html';
+        window.location.href = '/pages/login.html';
         return null;
     }
     return u;
@@ -31,7 +31,7 @@ async function login(loginStr, password) {
 
 async function logout() {
     await fetch('/api/auth/logout', { ...opcoes, method: 'POST' });
-    window.location.href = '/login.html';
+    window.location.href = '/pages/login.html';
 }
 
 async function registro(login, password, role) {

@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Login — PROTOCOLA</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="auth-wrapper">
@@ -31,17 +31,17 @@
         </form>
 
         <div class="auth-rodape">
-            Não tem conta? <a href="/cadastro.html">Cadastre-se</a>
+            Não tem conta? <a href="/pages/cadastro.html">Cadastre-se</a>
         </div>
     </div>
 </div>
 
-<script src="/api.js"></script>
+<script src="/js/api.js"></script>
 <script>
     // Se já logado, redireciona
     fetch('/api/auth/me', { credentials: 'include' })
         .then(r => r.ok ? r.json() : null)
-        .then(u => { if (u) window.location.href = u.role === 'GESTOR' ? '/home_gestor.html' : '/home_cidadao.html'; });
+        .then(u => { if (u) window.location.href = u.role === 'GESTOR' ? '/pages/home_gestor.html' : '/pages/home_cidadao.html'; });
 
     document.getElementById('form-login').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -55,7 +55,7 @@
         );
 
         if (ok) {
-            window.location.href = data.role === 'GESTOR' ? '/home_gestor.html' : '/home_cidadao.html';
+            window.location.href = data.role === 'GESTOR' ? '/pages/home_gestor.html' : '/pages/home_cidadao.html';
         } else {
             mostrarAlerta('alerta', data.erro || 'Erro ao fazer login.', 'erro');
             btn.disabled = false; btn.textContent = 'Entrar';

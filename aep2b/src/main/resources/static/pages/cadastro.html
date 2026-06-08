@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cadastro — PROTOCOLA</title>
     <link rel="icon" type="image/png" href="/images/logo.png">
-    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/css/style.css">
 </head>
 <body>
 <div class="auth-wrapper">
@@ -39,12 +39,12 @@
         </form>
 
         <div class="auth-rodape">
-            Já tem conta? <a href="/login.html">Faça login</a>
+            Já tem conta? <a href="/pages/login.html">Faça login</a>
         </div>
     </div>
 </div>
 
-<script src="/api.js"></script>
+<script src="/js/api.js"></script>
 <script>
     document.getElementById('form-registro').addEventListener('submit', async (e) => {
         e.preventDefault();
@@ -67,7 +67,7 @@
 
         if (ok) {
             mostrarAlerta('alerta', 'Conta criada! Redirecionando...', 'sucesso');
-            setTimeout(() => window.location.href = '/login.html', 1500);
+            setTimeout(() => window.location.href = '/pages/login.html', 1500);
         } else {
             mostrarAlerta('alerta', data.erro || 'Erro ao cadastrar.', 'erro');
             btn.disabled = false; btn.textContent = 'Criar conta';
