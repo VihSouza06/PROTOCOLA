@@ -25,7 +25,7 @@ public class DataLoader {
         if (usuarioRepository.count() == 0) {
 
             UserModel gestor = new UserModel(
-                    "gestor",
+                    "Ana",
                     passwordEncoder.encode("123456"),
                     UserRole.GESTOR
             );
@@ -33,7 +33,7 @@ public class DataLoader {
             usuarioRepository.save(gestor);
 
             UserModel cidadao = new UserModel(
-                    "cidadao",
+                    "Pedro",
                     passwordEncoder.encode("123456"),
                     UserRole.CIDADAO
             );
